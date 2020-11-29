@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using Application.Task.Commads;
 
 namespace Test.Common.Builders.Commands
@@ -18,6 +17,12 @@ namespace Test.Common.Builders.Commands
             _description = "This is default value";
             _userId = Guid.NewGuid();
 
+            return this;
+        }
+
+        public CreateTaskBuilder WithId(Guid id)
+        {
+            _id = id;
             return this;
         }
 

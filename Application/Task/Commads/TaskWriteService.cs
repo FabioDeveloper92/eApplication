@@ -21,7 +21,7 @@ namespace Application.Task.Commads
 
         public async Tasks.Task<Unit> Handle(CreateTask command, CancellationToken cancellationToken)
         {
-            var entity = Domain.Task.Create(command.Name, command.Description, command.UserId);
+            var entity = Domain.Task.Create(command.Name, command.Description, command.UserId, command.TaskId);
 
             IUnitOfWork uow = null;
 

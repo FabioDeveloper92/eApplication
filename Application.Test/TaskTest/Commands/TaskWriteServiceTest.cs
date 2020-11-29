@@ -47,7 +47,7 @@ namespace Application.Test.TaskTest.Commands
             var createBoard = new CreateTaskBuilder()
                 .WithName("")
                 .WithDescription("the name is void")
-                .WithUserId(new Guid())
+                .WithUserId(Guid.NewGuid())
                 .Build();
 
             //ACT 
@@ -64,7 +64,7 @@ namespace Application.Test.TaskTest.Commands
             var createBoard = new CreateTaskBuilder()
                 .WithName("Name")
                 .WithDescription("")
-                .WithUserId(new Guid())
+                .WithUserId(Guid.NewGuid())
                 .Build();
 
             //ACT 

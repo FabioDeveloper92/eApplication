@@ -1,5 +1,6 @@
 ﻿using System;
 using Application.Task.Commads;
+using Application.Task.Queries;
 using Config.Ioc;
 using Test.Common;
 using Test.Common.Builders;
@@ -24,6 +25,12 @@ namespace Application.Test.Ioc
         public void should_resolve_TaskWriteService()
         {
             _scopeResolver.IsInstancePerLifetimeScope<TaskWriteService>();
+        }
+
+        [Fact]
+        public void should_resolve_TaskReadService()
+        {
+            _scopeResolver.IsInstancePerLifetimeScope<TaskReadService>();
         }
 
         public void Dispose()

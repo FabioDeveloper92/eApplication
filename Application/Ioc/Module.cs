@@ -1,4 +1,5 @@
 ﻿using Application.Task.Commads;
+using Application.Task.Queries;
 using Autofac;
 using AutofacSerilogIntegration;
 using MediatR;
@@ -11,12 +12,17 @@ namespace Application.Ioc
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterModule(new Infrastructure.Write.Ioc.Module());
+            builder.RegisterModule(new Infrastructure.Read.Ioc.Module());
 
             builder.RegisterLogger();
 
             RegisterMediatr(builder);
 
             builder.RegisterType<TaskWriteService>()
+                   .AsSelf()
+                   .InstancePerLifetimeScope();
+
+            builder.RegisterType<TaskReadService>()
                    .AsSelf()
                    .InstancePerLifetimeScope();
         }
@@ -40,7 +46,7 @@ namespace Application.Ioc
                 .InstancePerLifetimeScope();
 
 
-           builder.RegisterAssemblyTypes(typeof(Module).Assembly).AsImplementedInterfaces();
+            builder.RegisterAssemblyTypes(typeof(Module).Assembly).AsImplementedInterfaces();
         }
     }
 }
