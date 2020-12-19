@@ -9,6 +9,8 @@ using Test.Infrastructure.Common;
 using Xunit;
 using Tasks = System.Threading.Tasks;
 using FluentAssertions;
+using Infrastructure.Write.Task;
+using Application.Task.Commads;
 
 namespace Application.Test.TaskTest.Commands
 {
@@ -34,24 +36,24 @@ namespace Application.Test.TaskTest.Commands
         public async Tasks.Task create_task_should_create_a_new_task()
         {
             //ARRANGE
-            var createBoard = new CreateTaskBuilder().WithDefaults().Build();
+            var createTask = new CreateTaskBuilder().WithDefaults().Build();
 
             //ACT
-            await _sandbox.Mediator.Send(createBoard);
+            await _sandbox.Mediator.Send(createTask);
         }
 
         [Fact]
         public void create_task_with_name_is_void_should_exception()
         {
             //ARRANGE
-            var createBoard = new CreateTaskBuilder()
+            var createTask = new CreateTaskBuilder()
                 .WithName("")
                 .WithDescription("the name is void")
                 .WithUserId(Guid.NewGuid())
                 .Build();
 
             //ACT 
-            Func<Tasks.Task> fn = async () => { await _sandbox.Mediator.Send(createBoard); };
+            Func<Tasks.Task> fn = async () => { await _sandbox.Mediator.Send(createTask); };
 
             //ASSERT
             fn.Should().Throw<EmptyFieldException>();
@@ -61,17 +63,71 @@ namespace Application.Test.TaskTest.Commands
         public void create_task_with_description_is_void_should_exception()
         {
             //ARRANGE
-            var createBoard = new CreateTaskBuilder()
+            var createTask = new CreateTaskBuilder()
                 .WithName("Name")
                 .WithDescription("")
                 .WithUserId(Guid.NewGuid())
                 .Build();
 
             //ACT 
-            Func<Tasks.Task> fn = async () => { await _sandbox.Mediator.Send(createBoard); };
+            Func<Tasks.Task> fn = async () => { await _sandbox.Mediator.Send(createTask); };
 
             //ASSERT
             fn.Should().Throw<EmptyFieldException>();
+        }
+
+        [Fact]
+        public async void create_task_and_update_name()
+        {
+            //ARRANGE
+            const string newTaskName = "new task name";
+            var taskId = Guid.NewGuid();
+
+            _sandbox.Scenario.WithTask(taskId, "old name", "desc", Guid.NewGuid());
+
+            //ACT
+            await _sandbox.Mediator.Send(new UpdateTaskName(taskId, newTaskName));
+
+            //ASSERT
+            var item = await _sandbox.Db.Get<TaskWriteDto>("tasks", taskId);
+
+            item.Name.Should().Be(newTaskName);
+        }
+
+        [Fact]
+        public async void create_task_and_update_description()
+        {
+            //ARRANGE
+            const string newTaskDescription = "new task name";
+            var taskId = Guid.NewGuid();
+
+            _sandbox.Scenario.WithTask(taskId, "old name", "desc", Guid.NewGuid());
+
+            //ACT
+            await _sandbox.Mediator.Send(new UpdateTaskDescription(taskId, newTaskDescription));
+
+            //ASSERT
+            var item = await _sandbox.Db.Get<TaskWriteDto>("tasks", taskId);
+
+            item.Description.Should().Be(newTaskDescription);
+        }
+
+        [Fact]
+        public async void create_task_and_update_userId()
+        {
+            //ARRANGE
+            var taskId = Guid.NewGuid();
+            var newUserId = Guid.NewGuid();
+
+            _sandbox.Scenario.WithTask(taskId, "old name", "desc", Guid.NewGuid());
+
+            //ACT
+            await _sandbox.Mediator.Send(new UpdateTaskUserId(taskId, newUserId));
+
+            //ASSERT
+            var item = await _sandbox.Db.Get<TaskWriteDto>("tasks", taskId);
+
+            item.UserId.Should().Be(newUserId);
         }
 
         public void Dispose()

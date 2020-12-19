@@ -12,14 +12,14 @@ namespace Web.Api.Controllers.Task
         }
 
         //[HttpPost]
-        //public async Task<Guid> Post([FromBody] NewBoard item)
+        //public async Task<Guid> Post([FromBody] NewTask item)
         //{
-        //    //var boardId = Guid.NewGuid();
+        //    //var taskId = Guid.NewGuid();
 
-        //    //await _mediator.Send(new CreateTask(boardId, item.Name, item.Description, false,
-        //    //    item.BoardOwners.Select(b => new BoardPersonDto(b.Role, new PersonDto(b.UserId, b.Name))).ToArray()));
+        //    //await _mediator.Send(new CreateTask(taskId, item.Name, item.Description, false,
+        //    //    item.TaskOwners.Select(b => new TaskPersonDto(b.Role, new PersonDto(b.UserId, b.Name))).ToArray()));
 
-        //    //return boardId;
+        //    //return taskId;
         //}
     }
 }

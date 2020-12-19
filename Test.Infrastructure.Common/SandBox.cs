@@ -2,6 +2,7 @@
 using Autofac;
 using Infrastructure.Core;
 using MediatR;
+using Test.Infrastructure.Common.Database;
 
 namespace Test.Infrastructure.Common
 {
@@ -13,6 +14,7 @@ namespace Test.Infrastructure.Common
         public readonly IConnectionFactory ConnectionFactory;
 
         public Scenario.Scenario Scenario { get; }
+        public FluentDbAssertion Db { get; }
 
         public Sandbox(params Module[] modules)
         {
@@ -31,6 +33,7 @@ namespace Test.Infrastructure.Common
             ConnectionFactory = _container.Resolve<IConnectionFactory>();
 
             Scenario = _container.Resolve<Scenario.Scenario>();
+            Db = new FluentDbAssertion(ConnectionFactory.Connection);
         }
 
         public void Dispose()

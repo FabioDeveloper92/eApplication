@@ -21,7 +21,7 @@ namespace Infrastructure.Read.Test.Ioc
         }
 
         [Fact]
-        public void should_resolve_BoardReadService()
+        public void should_resolve_TaskReadService()
         {
             _scopeResolver.IsSingleInstance<ITaskReadRepository, TaskReadRepository>();
         }

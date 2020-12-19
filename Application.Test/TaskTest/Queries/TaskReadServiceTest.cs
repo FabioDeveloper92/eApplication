@@ -30,16 +30,16 @@ namespace Application.Test.TaskTest.Queries
         }
 
         [Fact]
-        public async Tasks.Task get_all_board_return_two_board()
+        public async Tasks.Task get_all_task_return_two_task()
         {
             //ARRANGE
             var taskId1 = Guid.NewGuid();
-            const string taskName1 = "board 1";
+            const string taskName1 = "task 1";
             const string taskDescription1 = "desc 1 desc 2";
             var userId1 = Guid.NewGuid();
 
             var taskId2 = Guid.NewGuid();
-            const string taskName2 = "board2";
+            const string taskName2 = "task2";
             const string taskDescription2 = "description2";
             var userId2 = Guid.NewGuid(); ;
 
@@ -68,16 +68,16 @@ namespace Application.Test.TaskTest.Queries
 
 
         [Fact]
-        public async Tasks.Task get_board_with_id_return_one_board()
+        public async Tasks.Task get_task_with_id_return_one_task()
         {
             //ARRANGE
             var taskId1 = Guid.NewGuid();
-            const string taskName1 = "board 1";
+            const string taskName1 = "task 1";
             const string taskDescription1 = "desc 1 desc 2";
             var userId1 = Guid.NewGuid();
 
             var taskId2 = Guid.NewGuid();
-            const string taskName2 = "board2";
+            const string taskName2 = "task2";
             const string taskDescription2 = "description2";
             var userId2 = Guid.NewGuid(); ;
 
@@ -97,7 +97,7 @@ namespace Application.Test.TaskTest.Queries
         }
 
         [Fact]
-        public async Tasks.Task get_board_with_id_not_exist_retrn_null()
+        public async Tasks.Task get_task_with_id_not_exist_retrn_null()
         {
             //ARRANGE
             _sandbox.Scenario
