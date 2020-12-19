@@ -77,7 +77,7 @@ namespace Application.Test.TaskTest.Commands
         }
 
         [Fact]
-        public async void create_task_and_update_name()
+        public async void update_task_name()
         {
             //ARRANGE
             const string newTaskName = "new task name";
@@ -95,7 +95,7 @@ namespace Application.Test.TaskTest.Commands
         }
 
         [Fact]
-        public async void create_task_and_update_description()
+        public async void update_task_description()
         {
             //ARRANGE
             const string newTaskDescription = "new task name";
@@ -113,7 +113,7 @@ namespace Application.Test.TaskTest.Commands
         }
 
         [Fact]
-        public async void create_task_and_update_userId()
+        public async void update_task_userId()
         {
             //ARRANGE
             var taskId = Guid.NewGuid();
@@ -129,6 +129,52 @@ namespace Application.Test.TaskTest.Commands
 
             item.UserId.Should().Be(newUserId);
         }
+
+        [Fact]
+        public void update_task_name_with_void_should_excpetion()
+        {
+            //ARRANGE
+            const string newTaskName = "";
+            var taskId = Guid.NewGuid();
+
+            _sandbox.Scenario.WithTask(taskId, "old name", "desc", Guid.NewGuid());
+
+            //ACT 
+            Func<Tasks.Task> fn = async () => { await _sandbox.Mediator.Send(new UpdateTaskName(taskId, newTaskName)); };
+
+            //ASSERT
+            fn.Should().Throw<EmptyFieldException>();
+        }
+
+        [Fact]
+        public void update_task_description_with_void_should_excpetion()
+        {
+            //ARRANGE
+            const string newTaskDescription = "";
+            var taskId = Guid.NewGuid();
+
+            _sandbox.Scenario.WithTask(taskId, "old name", "desc", Guid.NewGuid());
+
+            //ACT 
+            Func<Tasks.Task> fn = async () => { await _sandbox.Mediator.Send(new UpdateTaskDescription(taskId, newTaskDescription)); };
+
+            //ASSERT
+            fn.Should().Throw<EmptyFieldException>();
+        }
+
+        [Fact]
+        public void update_task_not_exist_should_excpetion()
+        {
+            //ARRANGE
+            _sandbox.Scenario.WithTask(Guid.NewGuid(), "old name", "desc", Guid.NewGuid());
+
+            //ACT 
+            Func<Tasks.Task> fn = async () => { await _sandbox.Mediator.Send(new UpdateTaskName(Guid.NewGuid(), "test")); };
+
+            //ASSERT
+            fn.Should().Throw<NotFoundItemException>();
+        }
+
 
         public void Dispose()
         {
