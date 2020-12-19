@@ -7,7 +7,8 @@ using MediatR;
 
 namespace Application.Task.Queries
 {
-    public class TaskReadService : IRequestHandler<GetTasks, IList<TaskListReadDto>>
+    public class TaskReadService : IRequestHandler<GetTasks, IList<TaskListReadDto>>,
+                                   IRequestHandler<GetTask, TaskReadDto>
     {
         private readonly IConnectionFactory _connectionFactory;
         private readonly ITaskReadRepository _taskReadRepository;
@@ -21,6 +22,11 @@ namespace Application.Task.Queries
         public async Task<IList<TaskListReadDto>> Handle(GetTasks request, CancellationToken cancellationToken)
         {
             return await _taskReadRepository.All(_connectionFactory.Connection);
+        }
+
+        public async Task<TaskReadDto> Handle(GetTask request, CancellationToken cancellationToken)
+        {
+            return await _taskReadRepository.SingleOrDefault(_connectionFactory.Connection, request.Id);
         }
     }
 }

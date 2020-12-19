@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace Infrastructure.Read.Task
     public interface ITaskReadRepository
     {
         Task<List<TaskListReadDto>> All(IDbConnection connection);
+        Task<TaskReadDto> SingleOrDefault(IDbConnection connection, Guid id);
     }
 
     public class TaskReadRepository : ITaskReadRepository
@@ -25,6 +27,13 @@ namespace Infrastructure.Read.Task
             var items = await connection.QueryAsync<TaskListReadDto>(
               $"SELECT [ID], [Name], [Description], [UserId] FROM {TasksTable} WHERE isDeleted = 0");
             return items.ToList();
+        }
+
+        public async Task<TaskReadDto> SingleOrDefault(IDbConnection connection, Guid id)
+        {
+            var item = await connection.QuerySingleOrDefaultAsync<TaskReadDto>(
+              $"SELECT [ID], [Name], [Description], [UserId] FROM {TasksTable} WHERE [ID] = @id AND isDeleted = 0", param: new { id });
+            return item;
         }
     }
 }

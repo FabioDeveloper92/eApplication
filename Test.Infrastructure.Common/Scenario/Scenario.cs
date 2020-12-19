@@ -13,6 +13,20 @@ namespace Test.Infrastructure.Common.Scenario
             _mediator = mediator;
         }
 
+        public Scenario WithTask()
+        {
+            var createBoard = new CreateTaskBuilder()
+                .WithId(Guid.NewGuid())
+                .WithName("Default Name")
+                .WithDescription("Default Description")
+                .WithUserId(Guid.NewGuid())
+                .Build();
+
+            _mediator.Send(createBoard).Wait();
+
+            return this;
+        }
+
         public Scenario WithTask(Guid id, string name, string description, Guid userId)
         {
             var createBoard = new CreateTaskBuilder()
